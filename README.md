@@ -1,2 +1,2 @@
 # animal-management-api
-Animal management API built with Clojure and PostgreSQL, with plans to explore GraphQL and AI agents.
+Animal management API built with Clojure and PostgreSQL, evolving toward GraphQL and AI-powered agents.
