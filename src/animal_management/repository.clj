@@ -21,3 +21,21 @@
     db/db-spec
     ["DELETE FROM animals WHERE id = ?"
      id]))
+
+(defn- database-animal->domain
+  [animal]
+  (when animal
+    (-> animal
+        (update :species keyword)
+        (update :status keyword))))
+
+(defn find-animal
+  [id]
+  (some-> (jdbc/execute-one!
+            db/db-spec
+            ["SELECT id, name, species, status
+              FROM animals
+              WHERE id = ?"
+             id]
+            {:builder-fn rs/as-unqualified-maps})
+          database-animal->domain))

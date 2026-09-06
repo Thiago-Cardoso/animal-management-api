@@ -13,3 +13,19 @@
     (is (= "available" (:status animal)))
 
     (repository/delete-animal! (:id animal))))
+
+(deftest find-animal-test
+  (let [created (repository/create-animal!
+                  {:name "Luna"
+                   :species :dog
+                   :status :available})
+        found (repository/find-animal (:id created))]
+    (is (= (:id created) (:id found)))
+    (is (= "Luna" (:name found)))
+    (is (= :dog (:species found)))
+    (is (= :available (:status found)))
+
+    (repository/delete-animal! (:id created))))
+
+(deftest find-nonexistent-animal-test
+  (is (nil? (repository/find-animal 999999))))
