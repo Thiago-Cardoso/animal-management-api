@@ -2,7 +2,7 @@
   (:require [com.walmartlabs.lacinia :as lacinia]
             [com.walmartlabs.lacinia.schema :as schema]
             [cheshire.core :as json]
-            [animal-management.repository :as repository]
+            [animal-management.application :as application]
             [clojure.string :as string]))
 
 (defn- domain-animal->graphql
@@ -41,7 +41,7 @@
        :resolve
        (fn [_context _args _value]
          (map domain-animal->graphql
-              (repository/list-animals)))}
+              (application/list-animals)))}
 
       :hello
       {:type 'String
