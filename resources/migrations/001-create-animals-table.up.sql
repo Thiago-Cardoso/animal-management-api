@@ -1,0 +1,6 @@
+CREATE TABLE animals (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    species VARCHAR(50) NOT NULL,
+    status VARCHAR(50) NOT NULL
+);
