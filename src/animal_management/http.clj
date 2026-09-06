@@ -1,6 +1,8 @@
 (ns animal-management.http
   (:require [reitit.ring :as ring]
-            [cheshire.core :as json]))
+            [ring.middleware.json :refer [wrap-json-body]]
+            [cheshire.core :as json]
+            [animal-management.graphql :as graphql]))
 
 (defn health-handler
   [_request]
@@ -20,7 +22,10 @@
    :body (json/generate-string animals)})
 
 (def app
-  (ring/ring-handler
-    (ring/router
-      [["/health" {:get health-handler}]
-       ["/animals" {:get animals-handler}]])))
+  (wrap-json-body
+    (ring/ring-handler
+      (ring/router
+        [["/health" {:get health-handler}]
+         ["/animals" {:get animals-handler}]
+         ["/graphql" {:post graphql/graphql-handler}]]))
+    {:keywords? true}))
