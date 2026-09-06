@@ -74,3 +74,32 @@
     (application/delete-animal (:id animal))
 
     (is (nil? (application/find-animal (:id animal))))))
+
+(deftest adopt-animal-test
+  (let [animal (application/create-animal
+                 {:name "Thor"
+                  :species :dog
+                  :status :available})
+        adopted (application/adopt-animal (:id animal))
+        found (application/find-animal (:id animal))]
+    (is (= (:id animal) (:id adopted)))
+    (is (= :adopted (:status adopted)))
+    (is (= :adopted (:status found)))
+
+    (repository/delete-animal! (:id animal))))
+
+(deftest adopt-already-adopted-animal-test
+  (let [animal (application/create-animal
+                 {:name "Bella"
+                  :species :cat
+                  :status :adopted})
+        result (application/adopt-animal (:id animal))
+        found (application/find-animal (:id animal))]
+    (is (= (:id animal) (:id result)))
+    (is (= :adopted (:status result)))
+    (is (= :adopted (:status found)))
+
+    (repository/delete-animal! (:id animal))))
+
+(deftest adopt-nonexistent-animal-test
+  (is (nil? (application/adopt-animal 999999))))
