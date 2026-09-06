@@ -9,8 +9,8 @@
                   :status :available})]
     (is (number? (:id animal)))
     (is (= "Luna" (:name animal)))
-    (is (= "dog" (:species animal)))
-    (is (= "available" (:status animal)))
+    (is (= :dog (:species animal)))
+    (is (= :available (:status animal)))
 
     (repository/delete-animal! (:id animal))))
 
@@ -29,6 +29,23 @@
 
 (deftest find-nonexistent-animal-test
   (is (nil? (repository/find-animal 999999))))
+
+(deftest update-animal-test
+  (let [created (repository/create-animal!
+                  {:name "Luna"
+                   :species :dog
+                   :status :available})
+        updated (repository/update-animal!
+                  (:id created)
+                  {:name "Bella"
+                   :species :cat
+                   :status :adopted})]
+    (is (= (:id created) (:id updated)))
+    (is (= "Bella" (:name updated)))
+    (is (= :cat (:species updated)))
+    (is (= :adopted (:status updated)))
+
+    (repository/delete-animal! (:id created))))
 
 (deftest list-animals-test
   (let [first-animal (repository/create-animal!
