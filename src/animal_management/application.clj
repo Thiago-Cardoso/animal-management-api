@@ -1,5 +1,6 @@
 (ns animal-management.application
-  (:require [animal-management.repository :as repository]))
+  (:require [animal-management.core :as core]
+            [animal-management.repository :as repository]))
 
 (defn create-animal
   [animal]
@@ -16,6 +17,13 @@
 (defn update-animal
   [id animal]
   (repository/update-animal! id animal))
+
+(defn adopt-animal
+  [id]
+  (let [animal (repository/find-animal id)]
+    (when animal
+      (let [adopted-animal (core/adopt-animal animal)]
+        (repository/update-animal! id adopted-animal)))))
 
 (defn delete-animal
   [id]
