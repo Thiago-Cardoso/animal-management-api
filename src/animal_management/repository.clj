@@ -39,3 +39,13 @@
              id]
             {:builder-fn rs/as-unqualified-maps})
           database-animal->domain))
+
+(defn list-animals
+  []
+  (map database-animal->domain
+       (jdbc/execute!
+         db/db-spec
+         ["SELECT id, name, species, status
+           FROM animals
+           ORDER BY id"]
+         {:builder-fn rs/as-unqualified-maps})))

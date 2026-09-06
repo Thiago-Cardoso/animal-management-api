@@ -29,3 +29,24 @@
 
 (deftest find-nonexistent-animal-test
   (is (nil? (repository/find-animal 999999))))
+
+(deftest list-animals-test
+  (let [first-animal (repository/create-animal!
+                       {:name "Luna"
+                        :species :dog
+                        :status :available})
+        second-animal (repository/create-animal!
+                        {:name "Milo"
+                         :species :cat
+                         :status :available})
+        animals (repository/list-animals)]
+    (is (= 2 (count animals)))
+    (is (= ["Luna" "Milo"]
+           (map :name animals)))
+    (is (= [:dog :cat]
+           (map :species animals)))
+    (is (= [:available :available]
+           (map :status animals)))
+
+    (repository/delete-animal! (:id first-animal))
+    (repository/delete-animal! (:id second-animal))))
